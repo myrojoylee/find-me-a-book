@@ -9,6 +9,12 @@ const resolvers = {
     user: async (parent, { userId }) => {
       return User.findOne({ _id: userId });
     },
+    me: async (parent, context) => {
+      if (context.user) {
+        return User.findOne({ _id: context.user._id });
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
   },
 
   Mutation: {
@@ -50,7 +56,7 @@ const resolvers = {
       throw AuthenticationError;
     },
 
-    deleteBook: async (parent, { userId, bookId }, context) => {
+    removeBook: async (parent, { userId, bookId }, context) => {
       if (context.user) {
         return User.findOneAndUpdate(
           { _id: userId },
