@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Col, Form, Button, Card, Row } from "react-bootstrap";
 import { useMutation } from "@apollo/client";
 import Auth from "../utils/auth";
-import { saveBook, searchGoogleBooks } from "../utils/API";
+import { searchGoogleBooks } from "../utils/API";
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 import { SAVE_BOOK } from "../utils/mutations";
 
@@ -72,10 +72,7 @@ const SearchBooks = () => {
       const { data } = await saveBook({
         variables: {
           bookId,
-          description,
-          image,
-          link,
-          title,
+          bookToSave,
         },
       });
       // if book successfully saves to user's account, save book id to state
