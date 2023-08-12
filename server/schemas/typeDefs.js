@@ -4,7 +4,7 @@ const typeDefs = `
     username: String!
     email: String!
     password: String!
-    savedbooks: [Book]
+    savedBooks: [Book]
   }
 
   type Book {
