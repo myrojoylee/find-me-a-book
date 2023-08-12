@@ -34,6 +34,10 @@ const SignupForm = () => {
         variables: { ...userFormData },
       });
 
+      if (!data) {
+        throw new Error("something went wrong!");
+      }
+
       Auth.login(data.addUser.token);
     } catch (e) {
       console.error(e);
@@ -139,11 +143,9 @@ const SignupForm = () => {
         </Form.Group>
         <Button
           disabled={
-            !(
-              userFormData.username &&
-              userFormData.email &&
-              userFormData.password
-            )
+            !userFormData.username ||
+            !userFormData.email ||
+            !userFormData.password
           }
           type="submit"
           variant="success"
