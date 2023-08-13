@@ -7,7 +7,7 @@ const typeDefs = `
     savedBooks: [Book]
   }
 
-  type Book {
+ type Book {
     authors: [String]
     description: String!
     bookId: String!
