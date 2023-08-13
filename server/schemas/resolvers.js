@@ -42,7 +42,7 @@ const resolvers = {
       if (context.user) {
         return User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: bookToSave },
+          { $addToSet: { savedBooks: bookToSave } },
           {
             new: true,
             runValidators: true,
@@ -60,14 +60,14 @@ const resolvers = {
           {
             $pull: {
               savedBooks: {
-                _id: bookId,
+                bookId: bookId,
               },
             },
           },
           { new: true }
         );
       }
-      throw AuthenticationError;
+      throw new AuthenticationError("You need to be logged in!");
     },
   },
 };
