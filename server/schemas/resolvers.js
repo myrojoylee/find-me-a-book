@@ -40,13 +40,16 @@ const resolvers = {
 
     saveBook: async (parent, { bookToSave }, context) => {
       if (context.user) {
-        return User.findOneAndUpdate(
+        const result = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedBooks: bookToSave } },
+          { $push: { savedBooks: bookToSave } },
           {
             new: true,
             runValidators: true,
           }
+        );
+        return await User.findOne({ id: context.user._id }).populate(
+          "savedBooks"
         );
       }
 

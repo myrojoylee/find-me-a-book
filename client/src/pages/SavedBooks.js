@@ -2,14 +2,17 @@ import React from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_GET_ME } from "../utils/queries";
 import { REMOVE_BOOK } from "../utils/mutations";
+import { removeBookId } from "../utils/localStorage";
+
+import Auth from "../utils/auth";
 
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
 
 // import Auth from "../utils/auth";
 const SavedBooks = () => {
-  const { loading, data } = useQuery(QUERY_GET_ME);
+  const { data } = useQuery(QUERY_GET_ME);
+  const userData = data?.me || {};
 
-  const userData = data?.me || [];
   const userDataLength = Object.keys(userData).length;
 
   console.log(userData);
@@ -17,10 +20,16 @@ const SavedBooks = () => {
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
+    const token = Auth.loggedIn() ? Auth.getToken() : null;
+
+    if (!token) {
+      return false;
+    }
     try {
-      const { data } = await removeBook({
+      await removeBook({
         variables: { bookId },
       });
+      removeBookId(bookId);
     } catch (err) {
       console.error(err);
     }
@@ -33,8 +42,8 @@ const SavedBooks = () => {
 
   return (
     <>
-      <div fluid className="text-light bg-dark p-5">
-        <Container>
+      <div className="text-light bg-dark p-5">
+        <Container fluid>
           <h1>Viewing saved books!</h1>
         </Container>
       </div>
@@ -47,7 +56,7 @@ const SavedBooks = () => {
             : "You have no saved books!"}
         </h2>
         <Row>
-          {userData.savedBooks.map((book) => {
+          {userData.savedBooks?.map((book) => {
             return (
               <Col md="4">
                 <Card key={book.bookId} border="dark">

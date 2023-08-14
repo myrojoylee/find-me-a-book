@@ -5,6 +5,7 @@ import Auth from "../utils/auth";
 import { searchGoogleBooks } from "../utils/API";
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 import { SAVE_BOOK } from "../utils/mutations";
+// import { QUERY_GET_ME } from "../utils/queries";
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -16,6 +17,17 @@ const SearchBooks = () => {
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
 
   const [saveBook, { error }] = useMutation(SAVE_BOOK);
+
+  // review this
+  // const [saveBook, { error }] = useMutation(SAVE_BOOK, {
+  //   update(cache, { data: { saveBook } }) {
+  //     const { me } = cache.readQuery({ query: QUERY_GET_ME });
+  //     cache.writeQuery({
+  //       query: QUERY_GET_ME,
+  //       data: { me: { ...me, savedBooks: [...me.savedBooks, saveBook] } },
+  //     });
+  //   },
+  // });
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
 
@@ -46,6 +58,7 @@ const SearchBooks = () => {
         title: book.volumeInfo.title,
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || "",
+        link: book.volumeInfo.infoLink,
       }));
 
       setSearchedBooks(bookData);
@@ -70,11 +83,14 @@ const SearchBooks = () => {
 
     try {
       // const response = await saveBook(bookToSave, token);
-      const { data } = await saveBook({
+      await saveBook({
         variables: {
           bookToSave,
         },
       });
+      if (error) {
+        throw new Error("something went wrong!");
+      }
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
       console.log(savedBookIds);
@@ -119,8 +135,8 @@ const SearchBooks = () => {
         <Row>
           {searchedBooks.map((book) => {
             return (
-              <Col md="4">
-                <Card key={book.bookId} border="dark">
+              <Col key={book.bookId} md="4">
+                <Card border="dark">
                   {book.image ? (
                     <Card.Img
                       src={book.image}
