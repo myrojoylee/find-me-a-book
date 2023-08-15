@@ -18,17 +18,6 @@ const SearchBooks = () => {
 
   const [saveBook, { error }] = useMutation(SAVE_BOOK);
 
-  // review this
-  // const [saveBook, { error }] = useMutation(SAVE_BOOK, {
-  //   update(cache, { data: { saveBook } }) {
-  //     const { me } = cache.readQuery({ query: QUERY_GET_ME });
-  //     cache.writeQuery({
-  //       query: QUERY_GET_ME,
-  //       data: { me: { ...me, savedBooks: [...me.savedBooks, saveBook] } },
-  //     });
-  //   },
-  // });
-
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
 
   useEffect(() => {

@@ -10,7 +10,7 @@ import { Container, Card, Button, Row, Col } from "react-bootstrap";
 
 // import Auth from "../utils/auth";
 const SavedBooks = () => {
-  const { data } = useQuery(QUERY_GET_ME);
+  const { loading, data } = useQuery(QUERY_GET_ME);
   const userData = data?.me || {};
 
   const userDataLength = Object.keys(userData).length;
@@ -37,7 +37,7 @@ const SavedBooks = () => {
   };
 
   // if data isn't here yet, say so
-  if (!userDataLength) {
+  if (loading) {
     return <h2>LOADING...</h2>;
   }
 
