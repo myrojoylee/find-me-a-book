@@ -48,7 +48,7 @@ const resolvers = {
             runValidators: true,
           }
         );
-        console.log(context);
+        console.log(context.user);
         return await User.findOne({ id: context.user._id }).populate(
           "savedBooks"
         );
