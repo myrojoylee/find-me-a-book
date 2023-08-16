@@ -20,7 +20,9 @@ Please type the following in the terminal of your project's root directory to be
 
 - Find the deployed application [here](https://find-me-a-book-mjlee-e0b92e2140ee.herokuapp.com/).
 
-The animation below show the basic functionality of the app.
+Below is a demo of the functionality of the app:
+
+https://github.com/myrojoylee/find-me-a-book/assets/120980593/da57ced4-d336-4b68-85e3-271a803d1728
 
 ## Sources/Credits:
 
