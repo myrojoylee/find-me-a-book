@@ -5,7 +5,7 @@ import Auth from "../utils/auth";
 import { searchGoogleBooks } from "../utils/API";
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 import { SAVE_BOOK } from "../utils/mutations";
-// import { QUERY_GET_ME } from "../utils/queries";
+import { QUERY_GET_ME } from "../utils/queries";
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -71,11 +71,11 @@ const SearchBooks = () => {
     }
 
     try {
-      // const response = await saveBook(bookToSave, token);
       await saveBook({
         variables: {
           bookToSave,
         },
+        refetchQueries: [QUERY_GET_ME, "me"],
       });
       if (error) {
         throw new Error("something went wrong!");

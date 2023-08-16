@@ -13,9 +13,6 @@ const SavedBooks = () => {
   const { loading, data } = useQuery(QUERY_GET_ME);
   const userData = data?.me || {};
 
-  const userDataLength = Object.keys(userData).length;
-
-  console.log(userData);
   const [removeBook, { error }] = useMutation(REMOVE_BOOK);
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
@@ -26,7 +23,7 @@ const SavedBooks = () => {
       return false;
     }
     try {
-      const { data } = await removeBook({
+      await removeBook({
         variables: { bookId },
         refetchQueries: [QUERY_GET_ME, "me"],
       });
@@ -50,7 +47,7 @@ const SavedBooks = () => {
       </div>
       <Container>
         <h2 className="pt-5">
-          {userData.savedBooks.length
+          {userData?.savedBooks.length
             ? `Viewing ${userData.savedBooks.length} saved ${
                 userData.savedBooks.length === 1 ? "book" : "books"
               }:`
@@ -59,8 +56,8 @@ const SavedBooks = () => {
         <Row>
           {userData.savedBooks?.map((book) => {
             return (
-              <Col md="4">
-                <Card key={book.bookId} border="dark">
+              <Col key={book.bookId} md="4">
+                <Card border="dark">
                   {book.image ? (
                     <Card.Img
                       src={book.image}
@@ -85,6 +82,7 @@ const SavedBooks = () => {
           })}
         </Row>
       </Container>
+      {error && <div>Something went wrong...</div>}
     </>
   );
 };
